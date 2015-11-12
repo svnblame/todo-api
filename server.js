@@ -7,15 +7,19 @@ var todos = [
     // todo items (model(s))
     {
         id: 1,
-        description: 'Meet Mom for lunch',
+        description: 'Meet Mom for dinner',
         completed: false
     }, {
         id: 2,
-        description: 'Go to market',
+        description: 'Go to Cherry Valley Mall',
         completed: false
     }, {
         id: 3,
-        description: 'Get new smart phones',
+        description: 'Get new dumb phones',
+        completed: true
+    }, {
+        id: 4,
+        description: 'Go shopping at Meijers',
         completed: true
     }
 ];
