@@ -32,13 +32,17 @@ app.get('/todos/:id', function(req, res) {
     }
 });
 
+// POST /todos
 app.post('/todos', function(req, res) {
-    var body = req.body;
+
+    // only allow completed and description fields to be posted
+    var body = _.pick(req.body, 'completed', 'description');
     
     if (!_.isBoolean(body.completed) || !_.isString(body.description) || body.description.trim().length === 0) {
         return res.status(400).send();
     }
 
+    body.description = body.description.trim();
     // add id field
     body.id = todoNextId++;
 
@@ -46,6 +50,7 @@ app.post('/todos', function(req, res) {
     todos.push(body);
 
     res.json(body);
+    
 });
 
 app.listen(PORT, function() {
