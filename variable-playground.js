@@ -30,3 +30,5 @@ function addGrade(grades, grade) {
 
 addGrade(grades, 77);
 console.log(grades);
+
+// testing...
