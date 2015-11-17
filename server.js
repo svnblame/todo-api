@@ -19,10 +19,20 @@ app.get('/todos', function(req, res) {
     var queryParams = req.query;
     var filteredTodos = todos;
 
+    // If 'completed' query parameter was provided, return items filtered on provided value 
+    // (true or false)
     if (queryParams.hasOwnProperty('completed') && queryParams.completed === 'true') {
         filteredTodos = _.where(filteredTodos, {completed: true});
     } else if (queryParams.hasOwnProperty('completed') && queryParams.completed === 'false') {
         filteredTodos = _.where(filteredTodos, {completed: false});
+    }
+
+    // If 'q' query parameter was provided, return items filtered on provided value
+    if (queryParams.hasOwnProperty('q') && queryParams.q.length > 0) {
+        filteredTodos = _.filter(filteredTodos, function(todo) {
+            // Case-insensitive search on 'q' query parameter
+            return todo.description.toLowerCase().indexOf(queryParams.q.toLowerCase()) > -1;
+        });
     }
 
     res.json(filteredTodos);
