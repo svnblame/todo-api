@@ -124,6 +124,19 @@ app.put('/todos/:id', function(req, res) {
     });
 });
 
+// POST /users
+app.post('/users', function(req, res) {
+    // only allow email and password fields to be posted
+    var body = _.pick(req.body, 'email', 'password');
+
+    // call create on db.user
+    db.user.create(body).then(function(user) {
+        res.json(user.toJSON());
+    }, function(e) {
+        res.status(400).json(e);
+    });
+});
+
 db.sequelize.sync().then(function() {
     app.listen(PORT, function() {
         console.log('Express listening on port ' + PORT);
