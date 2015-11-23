@@ -1,10 +1,10 @@
 var express = require('express');
 var bodyParser = require('body-parser');
 var _ = require('underscore');
-var db = require('./db');
+var db = require('./db.js');
 var bcrypt = require('bcrypt');
 
-var middleware = require('./middleware')(db);
+var middleware = require('./middleware.js')(db);
 
 var app = express();
 var PORT = process.env.PORT || 3000;
@@ -70,7 +70,11 @@ app.post('/todos', middleware.requireAuthentication, function(req, res) {
 
     // call create on db.todo
     db.todo.create(body).then(function(todo) {
-        res.json(todo.toJSON());
+        req.user.addTodo(todo).then(function() {
+            return todo.reload();
+        }).then(function(todo) {
+            res.json(todo.toJSON());
+        });
     }, function(e) {
         res.status(400).json(e);
     });
@@ -159,6 +163,10 @@ app.post('/users/login', function(req, res) {
     });
 });
 
+/* 
+ * Based on our model definitions, create any missing tables.
+ * Passing {force: true} will first DROP tables before re-creating them.
+ */
 db.sequelize.sync({
     force: true
 }).then(function() {
